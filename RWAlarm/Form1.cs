@@ -19,9 +19,13 @@ namespace RWAlarm
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if(!Directory.Exists(@"c:\_a"))
+            if (comboBox1.SelectedIndex < 1) { MessageBox.Show("Select Drive !"); return; }
+
+            string root = comboBox1.Text;
+
+            if(!Directory.Exists(Path.Combine(root, "_a")))
             {
-                Directory.CreateDirectory(@"c:\_a");
+                Directory.CreateDirectory(Path.Combine(root, "_a"));
             }
 
             int count = 0;
@@ -30,16 +34,23 @@ namespace RWAlarm
                 for (int i = 1; i <= count; i++)
                 {
                     string data = Guid.NewGuid().ToString();
-                    File.WriteAllText(@"C:\_a\File_" + i.ToString("00000") + ".txt", data);
+                    File.WriteAllText(Path.Combine(root, "_a") + @"\File_" + i.ToString("00000") + ".txt", data);
                 }
 
-                MessageBox.Show("OK");
+                MessageBox.Show(Path.Combine(root, "_a") + " : OK");
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            comboBox1.Items.Add("SELECT");
 
+            foreach (var item in DriveInfo.GetDrives())
+            {
+                comboBox1.Items.Add(item);
+            }
+
+            comboBox1.SelectedIndex = 0;
         }
     }
 }
